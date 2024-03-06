@@ -1,0 +1,21 @@
+# First namespace
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: healet
+
+# Second namespace
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prometheus
+
+
+# Third namespace
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: grafana

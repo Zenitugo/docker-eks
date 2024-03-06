@@ -1,0 +1,13 @@
+variable "cluster" {}
+variable "eks-cluster-role" {}
+variable "private-subnet-ids" {}
+variable "node-group" {}
+variable "node-role" {}
+variable "eks-sg" {}
+variable "instance_type" {}
+variable "key_name" {}
+variable "cluster-policy" {}
+variable "WorkerPolicy" {}
+variable "CNIPolicy" {}
+variable "ContainerRegistry" {}
+variable "public-subnet-ids" {}

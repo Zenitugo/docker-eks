@@ -1,0 +1,15 @@
+variable "cidr_block" {}
+variable "bucket" {}
+variable "region" {}
+variable "public-subnets" {}
+variable "private-subnets" {}
+variable "cluster" {}
+variable "node-group" {}
+variable "instance_type" {}
+variable "key_name" {}
+variable "cluster-rolename" {}
+variable "node-role-name" {}
+variable "db-name" {}
+variable "billing_mode" {}
+variable "type" {}
+variable "hash_key" {}
