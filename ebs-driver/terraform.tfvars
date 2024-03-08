@@ -1,4 +1,4 @@
-region       = "eu-west-1"
+region       = "eu-central-1"
 cluster_name = "my-eks-cluster"
 ebs_csi      = "aws-ebs-csi-driver" 
 namespace    = "kube-system"
