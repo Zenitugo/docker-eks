@@ -98,9 +98,9 @@ jobs:
               helm repo update
               helm install prometheus prometheus-community/prometheus \
               --namespace prometheus \
-	      --set server.alertManager.persistentVolume.storageClass="gp2" \
-              --set server.persistentVolume.storageClass="gp2" \
-	      --set server.service.type=LoadBalancer   
+	            --set server.alertManager.persistentVolume.storageClass="gp2" \
+	            --set server.persistentVolume.storageClass="gp2" \
+	            --set server.service.type=LoadBalancer   
 
           - name: Installing grafana
             run: 
@@ -109,6 +109,6 @@ jobs:
               helm repo update
               helm install my-grafana grafana/grafana \
               --namespace grafana \
-	      --set persistence.storageClassName="gp2" \
-              --set adminPassword='ubuntu' \
-	      --set server.service.type=LoadBalancer
+              --set persistence.storageClassName="gp2" \
+	            --set adminPassword='ubuntu' \
+	            --set server.service.type=LoadBalancer
