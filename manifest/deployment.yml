@@ -1,0 +1,19 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: healet
+  namespace: healet
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: healet
+  template:
+    metadata:
+      labels:
+        name: healet
+  spec:
+      containers:
+      - name: front-end
+        image: zenitugo/healet
