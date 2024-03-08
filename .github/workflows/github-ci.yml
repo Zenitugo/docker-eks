@@ -93,10 +93,10 @@ jobs:
 
           - name: Installing prometheus
             run: 
-            echo "Installing Prometheus"
-            helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-            helm repo update
-            helm install prometheus prometheus-community/prometheus \
+              echo "Installing Prometheus"
+              helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+              helm repo update
+              helm install prometheus prometheus-community/prometheus \
               --namespace prometheus \
 	            --set server.alertManager.persistentVolume.storageClass="gp2" \
 	            --set server.persistentVolume.storageClass="gp2" \
