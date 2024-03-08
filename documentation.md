@@ -1,4 +1,4 @@
-# How to trouble shoot a pending pod in kubernetes
+# How to troubleshoot a pending pod in kubernetes
 1. Filter the pending pod `kubectl get pods -n prometheus --field-selector=status.phase=Pending`
 
 2. Check if the resaon for the pending state is a pod issue or a scheduler issue
@@ -53,11 +53,12 @@ Events:
 ```
 The prometheus alert manager pod wasn't also scheduled to any nodes
 
+3. I started to research on how to rectify a volume binding error for kubernetes pods.
 
-3.  After troubleshooting, I came across these (https://repost.aws/knowledge-center/eks-persistent-storage) and videos on youtube on how to get this done and I decided to use aterraform script to create the cbs driver. This is the resource in the **ebs-driver directory**
+4.  After troubleshooting, I came across these (https://repost.aws/knowledge-center/eks-persistent-storage) and videos on youtube on how to get this done and I decided to use a terraform script to create the cbs driver. This is the resource in the **ebs-driver directory**
 
 
-4. Write a claim for your ebs and edit the prometheus pod and alertmanager pods
+5. Write a claim for your ebs and edit the prometheus pod and alertmanager pods
 In these section of the resources above, let the claimName match the nameunder the metadata section in the claim.yml file
 ```
 volumes:
