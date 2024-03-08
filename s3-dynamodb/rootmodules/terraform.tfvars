@@ -1,0 +1,5 @@
+bucket                      = "ruby2116" 
+db-name                     = "rubysapphire234"
+type                        = "S"
+hash_key                    = "LockID"   
+billing_mode                = "PAY_PER_REQUEST"
