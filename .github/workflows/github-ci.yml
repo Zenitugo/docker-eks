@@ -92,7 +92,7 @@ jobs:
               kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.10.2/manifests/install.yaml
 
           - name: Installing prometheus
-            run: |
+            run: 
               echo "Installing Prometheus"
               helm repo add prometheus-community https://prometheus-community.github.io/helm-charts 
 	            helm repo update
@@ -103,7 +103,7 @@ jobs:
 	              --set server.service.type=LoadBalancer   
 
           - name: Installing grafana
-            run: |
+            run: 
               echo "Installing grafana"
               helm repo add grafana https://grafana.github.io/helm-charts
               helm repo update
