@@ -22,7 +22,7 @@ jobs:
           - name: Install helm
             uses: azure/setup-helm@v4.1.0
             with:
-              version: 'v3.14.0' # default is latest (stable)
+              version: 'v3.14.0'
             id: helm
 
           - name: Configure AWS Credentials
