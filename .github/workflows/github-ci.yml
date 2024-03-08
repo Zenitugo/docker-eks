@@ -96,19 +96,11 @@ jobs:
               echo "Installing Prometheus"
               helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
               helm repo update
-              helm install prometheus prometheus-community/prometheus \
-              --namespace prometheus \
-	            --set server.alertManager.persistentVolume.storageClass="gp2" \
-	            --set server.persistentVolume.storageClass="gp2" \
-	            --set server.service.type=LoadBalancer   
+              helm install prometheus prometheus-community/prometheus --namespace prometheus --set server.alertManager.persistentVolume.storageClass="gp2" --set server.persistentVolume.storageClass="gp2" --set server.service.type=LoadBalancer   
 
           - name: Installing grafana
             run: 
               echo "Installing grafana"
               helm repo add grafana https://grafana.github.io/helm-charts
               helm repo update
-              helm install my-grafana grafana/grafana \
-              --namespace grafana \
-              --set persistence.storageClassName="gp2" \
-	            --set adminPassword='ubuntu' \
-	            --set server.service.type=LoadBalancer
+              helm install my-grafana grafana/grafana --namespace grafana --set persistence.storageClassName="gp2" --set adminPassword='ubuntu' --set server.service.type=LoadBalancer
