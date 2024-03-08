@@ -1,0 +1,112 @@
+name: Workflow to create EKS and install ArgoCD
+
+on:
+    push:
+        branches: [ "master" ]
+    pull_request:
+        branches: [ "master" ]
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout code
+              uses: actions/checkout@v4
+
+            - name: Install kubectl
+              uses: azure/setup-kubectl@v3
+              with:
+                version: 'v1.29.0'
+              id: Install
+
+             - name: Install helm
+               uses: azure/setup-helm@v4.1.0
+               with:
+                version: 'v3.14.0' # default is latest (stable)
+               id: helm
+
+            - name: Configure AWS Credentials
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                aws-region: eu-central-1
+                aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+            - name: Configure Docker Hub
+              uses: docker/login-action@v3
+              with:
+                username: ${{ secrets.DOCKERHUB_USERNAME }}
+                password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+            - name: Login into docker hub
+              run: docker login -u $username -p $password   
+
+            - name: Build docker image
+              run: docker build . --file Dockerfile --tag zenitugo/healet
+
+            - name: Push docker image  
+              run: docker push zenitugo/healet
+
+        
+            - name: Create S3 buckets and dynamodb table
+              run: |
+                echo "Creating s3 bucket and dynamodb table"
+                cd s3-dynamodb
+                cd rootmodules
+                terraform init
+                terraform plan -var-file="terraform.tfvars"
+                terraform apply -auto-approve
+
+            - name: Create an EKS cluster
+              run: |
+                echo "Creating an eks cluster"
+                cd eks-cluster
+                cd dev
+                terraform init
+                terraform plan -var-file="terraform.tfvars"
+                terraform apply -auto-approve
+
+            - name: Create an EBS_CSI_DRIVER
+              run: |
+                echo "Creating an ebs-csi-driver cluster"
+                cd ebs-driver
+                terraform init
+                terraform plan -var-file="terraform.tfvars"
+                terraform apply -auto-approve
+
+
+            - name: Update kube config
+              run: aws eks update-kubeconfig --name my-eks-cluster
+
+            - name: Deploy to EKS
+              run: |
+                cd configure
+                echo "Creating namespace"
+                kubectl apply -f namespace.yml
+                echo creating "Persistence volume claim"
+                kububectl apply -f claim.yml
+
+            - name: Installing ArgoCD in EKS Cluster
+              run: |
+                echo "Installing argocd in eks cluster"
+                kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.10.2/manifests/install.yaml
+
+            - name: Installing prometheus
+              run: |
+                helm repo add prometheus-community https://prometheus-community.github.io/helm-charts \
+	              helm repo update; \
+	              helm install prometheus prometheus-community/prometheus \
+	              --namespace prometheus \
+	              --set server.alertManager.persistentVolume.storageClass="gp2" \
+	              --set server.persistentVolume.storageClass="gp2" \
+	              --set server.service.type=LoadBalancer   
+
+            - name: Installing grafana
+              run: |
+                helm repo add grafana https://grafana.github.io/helm-charts \
+                helm repo update; \
+                helm install my-grafana grafana/grafana \
+                --namespace grafana \
+                --set persistence.storageClassName="gp2"
+	              --set adminPassword='ubuntu'
+	              --set server.service.type=LoadBalancer
