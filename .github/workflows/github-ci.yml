@@ -1,4 +1,4 @@
-name: Workflow to create EKS and install ArgoCD
+name: Workflow to build and push docker image, create EKS, install ArgoCD, prometheus and grafana with helm
 
 on:
     push:
