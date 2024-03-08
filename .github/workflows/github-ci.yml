@@ -39,7 +39,7 @@ jobs:
               password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
           - name: Login into docker hub
-            run: docker login -u $username -p $password   
+            run: docker login -u ${{ username }} -p ${{ password }}  
 
           - name: Build docker image
             run: docker build . --file Dockerfile --tag zenitugo/healet
