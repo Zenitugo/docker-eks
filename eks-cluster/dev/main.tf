@@ -6,11 +6,6 @@ module "vpc" {
 }
 
 
-module "S3" {
-    source                   = "../child-modules/S3"
-    bucket                   = var.bucket 
-  
-}
 
 module "EKS" {
     source                  = "../child-modules/EKS"
@@ -44,10 +39,3 @@ module "iam" {
     clustername             = module.EKS.clustername 
 }
 
-module "dynamoDB" {
-    source                  = "../child-modules/dynamoDB"
-    db-name                 = var.db-name
-    billing_mode            = var.billing_mode
-    type                    = var.type
-    hash_key                = var.hash_key   
-}
