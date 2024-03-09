@@ -65,15 +65,3 @@ resource "aws_iam_role_policy_attachment" "ContainerRegistry" {
   role       = aws_iam_role.worker-node-role.name
 }
 
-
-
-locals {
-  ebs_csi_service_account_namespace = "kube-system"
-  ebs_csi_service_account_name = "ebs-csi-sa"
-}
-
-resource "aws_iam_policy" "ebs_csi_controller" {
-  name_prefix = "ebs-csi-controller"
-  description = "EKS ebs-csi-controller policy for cluster ${var.clustername}"
-  policy      = file("${path.module}/trust-policy.json")
-}
