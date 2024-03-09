@@ -85,7 +85,7 @@ jobs:
               echo "Creating namespace"
               kubectl apply -f namespace.yml
               echo creating "Persistence volume claim"
-              kububectl apply -f claim.yml
+              kubectl apply -f claim.yml
 
           - name: Installing ArgoCD in EKS Cluster
             run: |
