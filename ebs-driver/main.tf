@@ -1,8 +1,8 @@
 
 locals {
   partition          = data.aws_partition.current_testing.id
-  account_id         = data.aws_caller_identity.current_testing.account_id
-  oidc_provider_arn  = replace(data.aws_eks_cluster.cluster_testing.identity[0].oidc[0].issuer, "https://", "")
+  account_id         = data.aws_caller_identity.current_identity.account_id
+  oidc_provider_arn  = replace(data.aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer, "https://", "")
   oidc_provider_name = "arn:${local.partition}:iam::${local.account_id}:oidc-provider/${local.oidc_provider_arn}"
 }
 
