@@ -97,4 +97,11 @@ add-grafana:
 grafana:
 	kubectl get all -n "${namespace3}"
 
+# To Install ArgoCD
+argocd:
+	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.10.2/manifests/install.yaml
+
+# To deploy application with ArgoCd script
+	kubectl apply -f healet-app.yml
+
 

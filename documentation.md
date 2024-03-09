@@ -1,3 +1,27 @@
+# CI/CD PIPELINE
+This pipeline made use of Github Actions for Continous Integration and ArgoCD for Continuous Deployment
+
+Terraform was used to write the code that created the AWS Elastic Kubrnetes Service, S3 buckets, DynamoDB table and AWS ebs_csi_driver.
+
+For this Pipeline I used github actions to:
+- build a docker image with the use of the Dockerfile'
+- push the docker image to docker hub'
+- automate the creation of the AWS infrastructure using terraform script,
+- Install ArgoCD in the cluster
+- Install prometheus and grafana using helm
+
+
+I am deploying a static website gotten from (https://www.free-css.com/free-css-templates).
+The `Dockerfile` holds the necessary commands used to build the docker image. 
+
+The `makefile` holds the commands to build the AWS infrastructure and deploy application with argocd if I want to create this without automation.
+
+
+
+
+
+The major challenge I had with this project was that the prometheus pod and prometheus-alertmanger pod was in a pending state which made it impossible to view the prometheus dashboard on the browser. Below is a step by step process on how I resolved the issue.
+
 # How to troubleshoot a pending pod in kubernetes
 1. Filter the pending pod `kubectl get pods -n prometheus --field-selector=status.phase=Pending`
 
