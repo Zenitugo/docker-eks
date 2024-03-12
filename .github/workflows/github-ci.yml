@@ -102,7 +102,9 @@ jobs:
           for dir in ebs-driver
           echo "Creating an ebs-csi-driver cluster"
           cd $dir
-          terraform apply -auto-approve -var-file="terraform.tfvars" 
+          terraform init
+          terraform plan -var-file="terraform.tfvars" 
+          terraform apply -auto-approve 
 
       - name: Deploy to EKS
         run: |
