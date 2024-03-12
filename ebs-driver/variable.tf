@@ -3,3 +3,14 @@ variable "region" {}
 variable "ebs_csi" {}
 variable "namespace" {}
 variable "role_name" {}
+variable "volume_count" {}
+variable "name_prefix" {}
+variable "device_name" {}
+variable "kms_key_id" {}
+variable "encrypted" {}
+variable "wait_interval" {}
+variable "max_wait" {}
+variable "extra_tags" {}
+variable "snapshot_ids" {}
+variable "volume_type" {}
+variable "size" {}
