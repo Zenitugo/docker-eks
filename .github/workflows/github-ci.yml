@@ -20,12 +20,11 @@ on:
         action:
             description: 'Terraform Action to Perform'
             required: true
-            default: 'apply'
+            default: 'terraform_apply'
 
 jobs:  
   terraform_apply:
-    name: "Terraform_apply"
-    if: github.event.inputs.action == 'terraform_apply' 
+    name: "Terraform_apply" 
     continue-on-error: true
     runs-on: ubuntu-latest
     defaults:
