@@ -84,12 +84,13 @@ jobs:
             fi
             if [ -d "dev" ]; then
               cd dev
+              terraform init
               terraform plan -var-file="terraform.tfvars"
               terraform apply -auto-approve 
               cd ..
             fi
             cd ..
-          done
+          done  
 
       - name: Update kube config
         run: aws eks update-kubeconfig --name my-eks-cluster    
