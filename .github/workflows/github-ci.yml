@@ -25,7 +25,7 @@ on:
 jobs:  
   terraform_apply:
     name: "Terraform_apply"
-    if: github.ref == 'refs/heads/master' && github.event.inputs.action == 'terraform_apply' 
+    if: github.event.inputs.action == 'terraform_apply' 
     continue-on-error: true
     runs-on: ubuntu-latest
     defaults:
