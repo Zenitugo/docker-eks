@@ -27,7 +27,7 @@ on:
 jobs:  
   terraform_apply:
     name: "Terraform_apply"
-    if: github.ref == 'refs/heads/master' && github.event.inputs.action == 'Terraform_apply' 
+    if: ${{ github.ref == 'refs/heads/master' && github.event.inputs.action == 'Terraform_apply' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -55,8 +55,8 @@ jobs:
       - name: Configure Docker Hub
         uses: docker/login-action@v3
         with:
-            username: ${{ secrets.DOCKERHUB_USERNAME }}
-            password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -80,7 +80,7 @@ jobs:
         id: validate
         run: terraform validate 
 
-      - name: Apply Terraform Resources
+      - name: Create S3 bucket, dynamodb and cluster
         id: apply
         run: |
           for dir in s3-dynamode eks-cluster; do
@@ -143,7 +143,7 @@ jobs:
 
   terraform_destroy:
     name: "Terraform_destroy"
-    if: github.ref == 'refs/heads/master' && github.event.inputs.action == 'Terraform_destroy' 
+    if: ${{ github.ref == 'refs/heads/master' && github.event.inputs.action == 'Terraform_destroy' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
