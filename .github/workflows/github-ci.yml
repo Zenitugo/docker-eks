@@ -70,16 +70,6 @@ jobs:
       - name: Push docker image  
         run: docker push zenitugo/healet
 
-
-      - name: Terraform Init
-        id: init
-        run: terraform init
-        
-      
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate 
-
       - name: Create S3 bucket, dynamodb and cluster
         id: apply
         run: |
@@ -89,6 +79,7 @@ jobs:
           #Check if the nested directories exist and apply Terraform commands
             if [ -d "rootmodules" ]; then
               cd rootmodules
+              terraform init 
               terraform plan -var-file="terraform.tfvars"
               terraform apply -auto-approve 
               cd ..
