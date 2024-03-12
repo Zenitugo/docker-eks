@@ -71,7 +71,7 @@ jobs:
       - name: Create S3 bucket, dynamodb and cluster
         id: apply
         run: |
-          for dir in s3-dynamode eks-cluster; do
+          for dir in s3-dynamodb eks-cluster; do
             echo "Processing $dir"
             cd $dir
           #Check if the nested directories exist and apply Terraform commands
