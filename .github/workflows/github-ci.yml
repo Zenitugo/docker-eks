@@ -27,7 +27,7 @@ on:
 jobs:  
   terraform_apply:
     name: "Terraform_apply"
-    if: ${{ github.event.inputs.action == 'terraform_apply' }}
+    if: ${{ github.ref == 'refs/heads/master' && github.event_name == 'push' && github.event.inputs.action == 'terraform_apply' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -139,7 +139,7 @@ jobs:
 
   terraform_destroy:
     name: "Terraform_destroy"
-    if: ${{ github.event.inputs.action == 'terraform_destroy' }}
+    if: ${{ github.ref == 'refs/heads/master' && github.event_name == 'push' && github.event.inputs.action == 'terraform_destroy' }}
     runs-on: ubuntu-latest
     defaults:
       run:
