@@ -21,13 +21,13 @@ on:
             description: 'Terraform Action to Perform'
             type: choice
             options:
-            - Terraform_apply
-            - Terraform_destroy
+            - terraform_apply
+            - terraform_destroy
 
 jobs:  
   terraform_apply:
     name: "Terraform_apply"
-    if: ${{ github.ref == 'refs/heads/master' && github.event.inputs.action == 'Terraform_apply' }}
+    if: ${{ github.ref == 'refs/heads/master' && github.event.inputs.action == 'terraform_apply' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -136,7 +136,7 @@ jobs:
 
   terraform_destroy:
     name: "Terraform_destroy"
-    if: ${{ github.ref == 'refs/heads/master' && github.event.inputs.action == 'Terraform_destroy' }}
+    if: ${{ github.ref == 'refs/heads/master' && github.event.inputs.action == 'terraform_destroy' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
