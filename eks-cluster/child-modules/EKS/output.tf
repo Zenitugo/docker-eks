@@ -5,6 +5,6 @@ output "clustername" {
 
 
 # Output cluster identity
-output "clustername" {
+output "clusteridentity" {
     value = aws_eks_cluster.eks-cluster.identity
 }
