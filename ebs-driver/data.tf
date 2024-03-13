@@ -1,26 +1,17 @@
-data "aws_partition" "current_testing" {}
-
-data "aws_caller_identity" "current_identity" {}
-
-data "aws_eks_cluster" "eks-cluster" {
-  name = "my-eks-cluster"
-}
-
-data "aws_iam_policy_document" "ebs-volume-policy" {
-  count = var.volume_count
+data "aws_iam_policy_document" "csi" {
   statement {
-    effect = "Allow"
+    actions = ["sts:AssumeRoleWithWebIdentity"]
+    effect  = "Allow"
 
-    actions = [
-      "ec2:AttachVolume",
-      "ec2:DetachVolume",
-    ]
+    condition {
+      test     = "StringEquals"
+      variable = "${replace(aws_iam_openid_connect_provider.eks.url, "https://", "")}:sub"
+      values   = ["system:serviceaccount:kube-system:ebs-csi-controller-sa"]
+    }
 
-    resources = [
-      "arn:${data.aws_partition.current_testing.partition}:${data.aws_caller_identity.current_identity.account_id}:volume/${element(aws_ebs_volume.volumes.*.id, count.index)}",
-      "arn:${data.aws_partition.current_testing.partition}:${data.aws_caller_identity.current_identity.account_id}:instance/*",
-    ]
+    principals {
+      identifiers = [aws_iam_openid_connect_provider.eks.arn]
+      type        = "Federated"
+    }
   }
 }
-
-data "availability_zones" "az" {}
