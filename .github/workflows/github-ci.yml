@@ -15,7 +15,6 @@ on:
             options:
             - s3-dynamodb
             - ebs-cluster
-            - ebs-driver
       # Terraform action you want to perform
         action:
             description: 'Terraform Action to Perform'
@@ -93,17 +92,7 @@ jobs:
           done  
 
       - name: Update kube config
-        run: aws eks update-kubeconfig --name my-eks-cluster    
-        
-      - name: Create an EBS_CSI_DRIVER
-        id: apply-ebs 
-        run: |
-          for dir in ebs-driver
-            echo "Creating an ebs-csi-driver cluster"
-            cd $dir
-            terraform init
-            terraform plan -var-file="terraform.tfvars" 
-            terraform apply -auto-approve 
+        run: aws eks update-kubeconfig --name my-eks-cluster      
 
       - name: Deploy to EKS
         run: |

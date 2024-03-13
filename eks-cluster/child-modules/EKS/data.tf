@@ -1,3 +1,7 @@
+data "tls_certificate" "eks" {
+  url = aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer
+}
+
 data "aws_iam_policy_document" "csi" {
   statement {
     actions = ["sts:AssumeRoleWithWebIdentity"]

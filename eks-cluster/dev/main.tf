@@ -21,7 +21,9 @@ module "EKS" {
     WorkerPolicy            = module.iam.WorkerPolicy
     CNIPolicy               = module.iam.CNIPolicy
     ContainerRegistry       = module.iam.ContainerRegistry  
-    public-subnet-ids       = module.vpc.public-subnet-ids 
+    public-subnet-ids       = module.vpc.public-subnet-ids
+    addon_name              = var.addon_name
+    role_name               = var.role_name  
 }
 
 

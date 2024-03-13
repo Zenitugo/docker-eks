@@ -8,4 +8,6 @@ instance_type               = "t2.medium"
 key_name                    = "care-key"
 cluster-rolename            = "EKSClusterRole" 
 node-role-name              = "EKSWorkerNodes" 
+addon_name                  = "aws-ebs-csi-driver"
+role_name                   = "eks-ebs-csi-driver"
 

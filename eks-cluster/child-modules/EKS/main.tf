@@ -49,3 +49,33 @@ resource "aws_eks_node_group" "ec2-node-group" {
     var.ContainerRegistry,
   ]
 }
+
+# Create ebs csi drive on eks
+resource "aws_iam_openid_connect_provider" "eks" {
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = [data.tls_certificate.eks.certificates[0].sha1_fingerprint]
+  url             = aws_eks_cluster.eks-cluster.identity[0].oidc[0].issuer
+
+  depends_on = [ aws_eks_cluster.eks-cluster ]
+}
+
+
+resource "aws_iam_role" "eks_ebs_csi_driver" {
+  assume_role_policy = data.aws_iam_policy_document.csi.json
+  name               = var.role_name
+}
+
+resource "aws_iam_role_policy_attachment" "amazon_ebs_csi_driver" {
+  role       = aws_iam_role.eks_ebs_csi_driver.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+}
+
+resource "aws_eks_addon" "csi_driver" {
+  cluster_name             = aws_eks_cluster.eks-cluster.name
+  addon_name               = var.addon_name
+  addon_version            = "v1.11.4-eksbuild.1"
+  service_account_role_arn = aws_iam_role.eks_ebs_csi_driver.arn
+
+  depends_on = [ aws_iam_openid_connect_provider.eks ]
+
+}

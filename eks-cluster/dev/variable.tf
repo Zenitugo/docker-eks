@@ -8,3 +8,5 @@ variable "instance_type" {}
 variable "key_name" {}
 variable "cluster-rolename" {}
 variable "node-role-name" {}
+variable "addon_name" {}
+variable "role_name" {}
