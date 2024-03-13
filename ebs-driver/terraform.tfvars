@@ -1,5 +1,4 @@
 region       = "eu-west-1"
 cluster_name = "my-eks-cluster"
-ebs_csi      = "aws-ebs-csi-driver" 
-namespace    = "kube-system"
-role_name    = "ebs-csi"
+addon_name   = "aws-ebs-csi-driver"
+role_name    = "eks-ebs-csi-driver"
