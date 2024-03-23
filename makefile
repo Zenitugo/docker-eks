@@ -1,6 +1,6 @@
 IMAGE=zenitugo/healet
 varfile=terraform.tfvars
-deployfile=deploy.yml
+deployfile=deployment.yml
 servicefile=service.yml
 REGION=eu-central-1
 clusterName=my-eks-cluster
