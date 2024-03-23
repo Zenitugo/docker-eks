@@ -10,3 +10,9 @@ variable "cluster-rolename" {}
 variable "node-role-name" {}
 variable "addon_name" {}
 variable "role_name" {}
+variable "controller_role_name" {}
+variable "controller_policy_name" {}
+variable "clustername" {}
+variable "alternative_name" {}
+variable "domain_name" {}
+

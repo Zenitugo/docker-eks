@@ -10,4 +10,9 @@ cluster-rolename            = "EKSClusterRole"
 node-role-name              = "EKSWorkerNodes" 
 addon_name                  = "aws-ebs-csi-driver"
 role_name                   = "eks-ebs-csi-driver"
+controller_role_name        = "aws-load-balancer-controller"
+controller_policy_name      = "AWSLoadBalancerController"
+domain_name                 = "sapphireaura.com.ng"
+alternative_name            = "*.sapphireaura.com.ng"
+
 
