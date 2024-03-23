@@ -1,0 +1,2 @@
+eks-cluster/dev/terraform.tfvars
+s3-dynamodb/rootmodules/terraform.tfvars
