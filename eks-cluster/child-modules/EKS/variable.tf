@@ -12,4 +12,4 @@ variable "CNIPolicy" {}
 variable "ContainerRegistry" {}
 variable "public-subnet-ids" {}
 variable "addon_name" {}
-variable "role_name" {}
+variable "ebs-csi-role" {}
