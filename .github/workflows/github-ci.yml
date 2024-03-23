@@ -1,12 +1,7 @@
 name: Workflow to build and push docker image, create EKS, install ArgoCD, prometheus and grafana with helm
 
 on:
-    push:
-        branches: [ "master" ]
-    pull_request:
-        branches: [ "master" ]  
-
-    workflow_dispatch:
+  workflow_dispatch:
       inputs:
       # Working directory input from user.
         resource:
@@ -24,7 +19,7 @@ on:
 jobs:  
   terraform_apply:
     name: "Terraform_apply" 
-    continue-on-error: true
+    if: ${{ github.ref == 'refs/heads/master' && github.event.inputs.action == 'Terraform_apply' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -99,9 +94,7 @@ jobs:
           cd configure
           echo "Creating namespace"
           kubectl apply -f namespace.yml
-          echo creating "Persistence volume claim"
-          kubectl apply -f claim.yml
-
+         
       - name: Installing ArgoCD in EKS Cluster
         run: |
           echo "Installing argocd in eks cluster"
@@ -121,5 +114,76 @@ jobs:
           helm repo update
           helm install my-grafana grafana/grafana --namespace grafana --set persistence.storageClassName="gp2" --set adminPassword='ubuntu' --set server.service.type=LoadBalancer    
   
+      - name: Install CRD for cert manager
+        run: |
+          kubectl apply -n cert-manager -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.4/cert-manager.crds.yaml 
+                  
+      - name: Install Cert Manager
+        run: |
+          kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.4/cert-manager.yaml 
+            
+      - name: Install nginx ingress controller
+        run:  |
+          kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v3.4.3/deploy/static/provider/aws/deploy.yaml
+            
+      - name: Send notification to slack on the status of my pipeline
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+                "text": "Github Actions Complete, CI pipeline successful: Docker image pushed to docker hub and EKS created successfully"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        id: Slack                
 
- 
+  terraform_destroy:
+    name: "Terraform_destroy"
+    if: ${{ github.ref == 'refs/heads/master' && github.event.inputs.action == 'Terraform_destroy' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: eu-west-1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Create S3 bucket, dynamodb and cluster
+        id: destroy
+        run: |
+          for dir in eks-cluster s3-dynamodb; do
+              echo "Processing $dir"
+              cd $dir
+            #Check if the nested directories exist and apply Terraform commands
+              if [ -d "dev" ]; then
+                cd rootmodules
+                terraform init 
+                terraform destroy -auto-approve 
+                cd ..
+              fi
+              if [ -d "rootmodules" ]; then
+                cd dev
+                terraform init
+                terraform destroy -auto-approve 
+                cd ..
+              fi
+              cd ..
+            done  
+
+      - name: Send notification to slack on the status of my pipeline
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+                "text": "Github Actions Complete, CI pipeline successful: EKS infrastructure destroyed successfully"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
+          SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
+        id: Slack    
+  
