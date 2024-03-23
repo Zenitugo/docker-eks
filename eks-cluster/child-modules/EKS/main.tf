@@ -16,7 +16,8 @@ resource "aws_eks_cluster" "eks-cluster" {
   ]
 }
 
-
+##########################################################################################################################################
+##########################################################################################################################################
 # Create the EKS NODE GROUP
 resource "aws_eks_node_group" "ec2-node-group" {
   cluster_name    = aws_eks_cluster.eks-cluster.name
@@ -50,7 +51,10 @@ resource "aws_eks_node_group" "ec2-node-group" {
   ]
 }
 
-# Create ebs csi drive on eks
+################################################################################################################################################################
+################################################################################################################################################################
+
+# Create an iam OIDC identity provider
 resource "aws_iam_openid_connect_provider" "eks" {
   client_id_list  = ["sts.amazonaws.com"]
   thumbprint_list = [data.tls_certificate.eks.certificates[0].sha1_fingerprint]
@@ -59,22 +63,15 @@ resource "aws_iam_openid_connect_provider" "eks" {
   depends_on = [ aws_eks_cluster.eks-cluster ]
 }
 
+###################################################################################################################################################################
+###################################################################################################################################################################
 
-resource "aws_iam_role" "eks_ebs_csi_driver" {
-  assume_role_policy = data.aws_iam_policy_document.csi.json
-  name               = var.role_name
-}
-
-resource "aws_iam_role_policy_attachment" "amazon_ebs_csi_driver" {
-  role       = aws_iam_role.eks_ebs_csi_driver.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
-}
-
+# Create ebs csi drive on eks
 resource "aws_eks_addon" "csi_driver" {
   cluster_name             = aws_eks_cluster.eks-cluster.name
   addon_name               = var.addon_name
-  addon_version            = "v1.11.4-eksbuild.1"
-  service_account_role_arn = aws_iam_role.eks_ebs_csi_driver.arn
+  addon_version            = data.aws_eks_addon_version.latest.version
+  service_account_role_arn = var.ebs-csi-role
 
   depends_on = [ aws_iam_openid_connect_provider.eks ]
 
