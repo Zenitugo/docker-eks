@@ -6,8 +6,8 @@ metadata:
   namespace: healet
 spec:
   selector:
-    app: webapp
+    name: healet
   ports:
     - port: 80
-      targetPort: 8079 
+      targetPort: 8080
   type: LoadBalancer
