@@ -8,14 +8,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      name: webapp
+      name: healet
   template:
     metadata:
       labels:
         name: healet
-  spec:
+    spec:
       containers:
-      - name: app
+      - name: healet
         image: zenitugo/healet
         ports:
         - containerPort: 80
