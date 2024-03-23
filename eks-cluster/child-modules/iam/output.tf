@@ -28,3 +28,8 @@ output "ContainerRegistry" {
     value   = aws_iam_role_policy_attachment.ContainerRegistry.id
   
 }
+
+
+output "ebs-csi-role" {
+    value = aws_iam_role.eks_ebs_csi_driver.arn
+}
