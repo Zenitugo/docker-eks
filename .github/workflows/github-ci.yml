@@ -9,7 +9,7 @@ on:
             description: Choose the resource
             options:
             - s3-dynamodb
-            - ebs-cluster
+            - eKs-cluster
       # Terraform action you want to perform
         action:
             description: 'Terraform Action to Perform'
