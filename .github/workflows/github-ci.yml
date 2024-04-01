@@ -161,13 +161,13 @@ jobs:
               cd $dir
             #Check if the nested directories exist and apply Terraform commands
               if [ -d "dev" ]; then
-                cd rootmodules
+                cd dev
                 terraform init 
                 terraform destroy -auto-approve 
                 cd ..
               fi
               if [ -d "rootmodules" ]; then
-                cd dev
+                cd rootmodules
                 terraform init
                 terraform destroy -auto-approve 
                 cd ..
