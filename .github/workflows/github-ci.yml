@@ -79,7 +79,6 @@ jobs:
             if [ -d "dev" ]; then
               cd dev
               terraform init
-              terraform plan -var-file="terraform.tfvars"
               terraform apply -auto-approve 
               cd ..
             fi
